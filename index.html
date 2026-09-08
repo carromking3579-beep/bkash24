@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="bn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>লোন | বিকাশ</title>
+
+    <!-- Security Meta Tags -->
+    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.tailwindcss.com https://fonts.googleapis.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; font-src 'self' https: data:;">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'bkash-pink': '#E2136E',
+                        'bkash-dark-pink': '#C91155',
+                        'bkash-light-pink': '#F8E8F0',
+                        'bkash-gray': '#666666',
+                        'bkash-light-gray': '#F5F5F5'
+                    },
+                    fontFamily: {
+                        'bkash': ['Roboto', 'Arial', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="icon" type="image/png" href="img/favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .font-medium {
+            font-weight: 800;
+        }
+
+        .text-xs {
+            font-size: 13px;
+            line-height: 1rem;
+        }
+
+        .py-1 {
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body class="font-bkash bg-white">
+    <!-- Header -->
+    <header class="bg-bkash-pink text-white sticky top-0 z-50">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center space-x-2">
+                    <img src="img/Bkash.png" alt="bKash" class="h-8">
+                </div>
+
+                <!-- Desktop Navigation -->
+                <nav class="hidden lg:flex items-center space-x-8">
+                    <div class="relative group">
+                        <a href="#" class="flex items-center space-x-1 hover:text-pink-200 transition-colors">
+                            <span>Personal</span>
+                            <i class="fas fa-chevron-down text-xs"></i>
+                        </a>
+                    </div>
+                    <div class="relative group">
+                        <a href="#" class="flex items-center space-x-1 hover:text-pink-200 transition-colors">
+                            <span>Business</span>
+                            <i class="fas fa-chevron-down text-xs"></i>
+                        </a>
+                    </div>
+                    <a href="#" class="hover:text-pink-200 transition-colors text-sm">সাহায্য</a>
+                    <a href="#" class="hover:text-pink-200 transition-colors text-sm">সম্পর্কে</a>
+                    <a href="#" class="hover:text-pink-200 transition-colors text-sm">ক্যারিয়ার</a>
+                    <a href="#" class="hover:text-pink-200 transition-colors text-sm">ব্লগ</a>
+                    <a href="#" class="hover:text-pink-200 transition-colors text-sm">ডেভেলপার</a>
+                </nav>
+
+                <!-- Right Side -->
+                <div class="hidden lg:flex items-center space-x-4">
+                    <div class="flex items-center space-x-2">
+                        <span class="text-sm">ENG</span>
+                        <i class="fas fa-chevron-down text-xs"></i>
+                    </div>
+                    <button class="bg-white text-bkash-pink px-4 py-2 rounded-md font-medium hover:bg-gray-100 transition-colors text-sm">
+                        বিকাশ অ্যাপ নিন
+                    </button>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="lg:hidden flex items-center space-x-4 mr-2">
+                    <span class="bg-white text-red-500 text-xs font-medium px-2 py-1 rounded" style="border-radius: 5px;">বিকাশ অ্যাপ</span>
+                    <button class="text-white" id="mobile-menu-toggle">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Overlay -->
+        <div class="lg:hidden hidden fixed inset-0 bg-black bg-opacity-50 z-40" id="mobile-menu-overlay"></div>
+
+        <!-- Mobile Menu -->
+        <div class="lg:hidden fixed top-0 right-0 w-80 h-full bg-white z-50 shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out" id="mobile-menu">
+            <!-- Mobile Menu Header -->
+            <div class="bg-bkash-pink text-white px-4 py-4 flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <button class="text-white hover:text-pink-200 transition-colors" id="mobile-menu-close">
+                        <i class="fas fa-arrow-left text-lg"></i>
+                    </button>
+                    <img src="img/Bkash.png" alt="bKash" class="h-6">
+                </div>
+                <div class="flex items-center space-x-2 text-sm">
+                    <span class="bg-white text-bkash-pink px-3 py-1 rounded-full text-xs font-medium">বাং</span>
+                    <span class="text-xs opacity-70">En</span>
+                    <i class="fas fa-chevron-down text-xs opacity-70"></i>
+                </div>
+            </div>
+
+            <!-- Mobile Menu Content -->
+            <div class="flex flex-col h-full bg-white">
+                <!-- Menu Items -->
+                <div class="pt-4">
+                    <a href="#" class="flex items-center justify-between px-6 py-5 text-gray-800 hover:bg-gray-50 transition-colors border-b border-gray-100">
+                        <span class="font-medium text-sm">ব্যক্তিগত</span>
+                        <i class="fas fa-chevron-right text-gray-400 text-sm"></i>
+                    </a>
+                    <a href="#" class="flex items-center justify-between px-6 py-5 text-gray-800 hover:bg-gray-50 transition-colors border-b border-gray-100">
+                        <span class="font-medium text-sm">ব্যবসায়িক</span>
+                        <i class="fas fa-chevron-right text-gray-400 text-sm"></i>
+                    </a>
+                    <a href="#" class="flex items-center justify-between px-6 py-5 text-gray-800 hover:bg-gray-50 transition-colors border-b border-gray-100">
+                        <span class="font-medium text-sm">সহায়তা</span>
+                    </a>
+                    <a href="#" class="flex items-center justify-between px-6 py-5 text-gray-800 hover:bg-gray-50 transition-colors border-b border-gray-100">
+                        <span class="font-medium text-sm">সম্পর্কে</span>
+                        <i class="fas fa-chevron-right text-gray-400 text-sm"></i>
+                    </a>
+                    <a href="#" class="flex items-center justify-between px-6 py-5 text-gray-800 hover:bg-gray-50 transition-colors border-b border-gray-100">
+                        <span class="font-medium text-sm">ক্যারিয়ার</span>
+                        <i class="fas fa-chevron-right text-gray-400 text-sm"></i>
+                    </a>
+                    <a href="#" class="flex items-center justify-between px-6 py-5 text-gray-800 hover:bg-gray-50 transition-colors border-b border-gray-100">
+                        <span class="font-medium text-sm">ব্লগ</span>
+                    </a>
+                    <a href="#" class="flex items-center justify-between px-6 py-5 text-gray-800 hover:bg-gray-50 transition-colors">
+                        <span class="font-medium text-sm">ছাত্র</span>
+                    </a>
+                </div>
+
+                <!-- Spacer to push content to bottom -->
+                <div class="flex-grow" style="min-height: 40px;"></div>
+
+                <!-- Download Section -->
+                <div class="px-6 py-4">
+                    <p class="text-center text-gray-700 text-sm font-medium mb-3">বিকাশ এক্সপেরিয়েন্স করতে </p>
+                    <button class="w-full bg-bkash-pink text-white px-6 py-4 rounded-lg font-semibold text-sm hover:bg-bkash-dark-pink transition-colors text-center shadow-md">
+                        অ্যাপ ডাউনলোড করুন
+                    </button>
+                </div>
+
+                <!-- Footer Info -->
+                <div class="px-6 py-6 border-t border-gray-200 mt-4">
+                    <p class="text-xs text-gray-500 text-center font-medium">© 2026 bKash, সকল অধিকার সংরক্ষিত</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative overflow-hidden bg-gray-100">
+        <div class="w-full sm:h-[34rem] md:h-[36rem] lg:h-auto">
+            <!-- Mobile Image -->
+            <img src="img/openim.jpg" alt="বিকাশ লোন হিরো মোবাইল" class="w-full object-contain object-center lg:hidden">
+            <!-- Desktop Image -->
+            <img src="img/loan_1703837924854.webp" alt="বিকাশ লোন হিরো ডেস্কটপ" class="hidden lg:block w-full h-full object-contain object-center">
+        </div>
+    </section>
+
+    <!-- Loan Info Section -->
+    <section class="bg-white py-4 lg:py-16">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-2xl lg:text-3xl font-bold text-bkash-pink mb-4" data-translate="loan-main-title">লোন</h2>
+            <p class="text-gray-600 text-base mb-8 max-w-2xl mx-auto" data-translate="loan-main-description">
+                যখনই প্রয়োজন, বিকাশ অ্যাপের মাধ্যমে সিটি ব্যাংক থেকে তাৎক্ষণিক লোন নিন
+            </p>
+            <a href="lon_request.html" class="bg-white text-bkash-pink border-2 border-bkash-pink 
+          px-6 md:px-8 py-2 md:py-3 rounded-full font-medium 
+          hover:bg-bkash-pink hover:text-white 
+          transition-all duration-300 inline-block 
+          text-sm sm:text-base md:text-lg 
+          whitespace-nowrap" data-translate="loan-main-button">
+   বিকাশ থেকে লোন নিতে এখানে ক্লিক করুন
+</a>
+
+        </div>
+    </section>
+
+    <!-- Loan Service Section -->
+    <section class="bg-white py-16">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col lg:flex-row items-center gap-12 max-w-4xl mx-auto">
+                <div class="flex-1 text-center lg:text-left">
+                    <h3 class="text-2xl font-bold text-bkash-pink mb-6" data-translate="loan-title">লোন</h3>
+                    <p class="text-gray-600 text-base mb-8 leading-relaxed" data-translate="loan-description">
+                        ছোট, দ্রুত লোন নেওয়া এখন আগের চেয়ে সহজ! যখনই প্রয়োজন, বিকাশ অ্যাপের মাধ্যমে সিটি ব্যাংক থেকে তাৎক্ষণিক লোন নিন।
+                    </p>
+                    <a href="https://www.bkash.com/products-services/loan/loan-bkash" class="text-bkash-pink font-medium text-base flex items-center justify-center lg:justify-start space-x-2 hover:text-bkash-dark-pink transition-colors">
+                    <span data-translate="learn-more">বিস্তারিত জানুন</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+                </div>
+                <div class="flex-shrink-0">
+                    <img src="img/website-loan_1711547275595.webp" alt="লোন" class="w-80 lg:w-96 h-auto">
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Pay Later Service Section -->
+    <section class="bg-bkash-light-gray py-16">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col lg:flex-row items-center justify-center gap-12 max-w-4xl mx-auto text-center lg:text-left">
+
+                <!-- Image -->
+                <div class="flex-shrink-0 order-2 lg:order-1">
+                    <img src="img/website-pay-later_1711552228780.webp" alt="Pay Later" class="w-80 lg:w-96 h-auto mx-auto">
+                </div>
+
+                <!-- Text Content -->
+                <div class="flex-1 order-1 lg:order-2">
+                    <h3 class="text-2xl font-bold text-bkash-pink mb-6" data-translate="pay-later-title">পে-লেটার</h3>
+                    <p class="text-gray-600 text-base mb-8 leading-relaxed" data-translate="pay-later-description">
+                        পেমেন্ট করতে চান কিন্তু আপনার বিকাশ অ্যাকাউন্টে ব্যালেন্স নেই? সিটি ব্যাংক এবং বিকাশ আপনার জন্য পরে পেমেন্ট সেবা চালু করেছে।
+                    </p>
+                    <a href="https://www.bkash.com/products-services/loan/pay-later" class="text-bkash-pink font-medium text-base inline-flex items-center space-x-2 hover:text-bkash-dark-pink transition-colors mx-auto lg:mx-0">
+          <span data-translate="learn-more">বিস্তারিত জানুন</span>
+          <i class="fas fa-arrow-right"></i>
+        </a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+
+
+
+    <!-- Platforms Section -->
+    <section class="bg-bkash-light-pink py-16">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-2xl lg:text-3xl font-bold text-gray-800 mb-4" data-translate="platforms-title">একাধিক প্ল্যাটফর্মে উপলব্ধ</h2>
+            </div>
+
+            <div class="max-w-5xl mx-auto">
+                <!-- Tab Navigation -->
+                <div class="flex justify-center mb-8">
+                    <div class="bg-white rounded-full p-2 shadow-lg">
+                        <div class="flex space-x-2">
+                            <button class="tab-btn active bg-bkash-pink text-white px-6 py-3 rounded-full font-medium transition-all duration-300 hover:bg-bkash-dark-pink" data-tab="app-tab">
+                                <i class="fas fa-mobile-alt mr-2"></i><span data-translate="app-tab">অ্যাপ</span>
+                            </button>
+                            <button class="tab-btn text-gray-600 hover:text-bkash-pink px-6 py-3 rounded-full font-medium transition-all duration-300" data-tab="ussd-tab">
+                                <i class="fas fa-phone mr-2"></i><span data-translate="ussd-tab">ইউএসএসডি</span>
+                            </button>
+                            <button class="tab-btn text-gray-600 hover:text-bkash-pink px-6 py-3 rounded-full font-medium transition-all duration-300" data-tab="web-tab">
+                                <i class="fas fa-globe mr-2"></i><span data-translate="web-tab">ওয়েব</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab Content -->
+                <div class="tab-content">
+                    <!-- App Tab -->
+                    <div id="app-tab" class="tab-pane active">
+                        <div class="bg-white rounded-2xl p-8 shadow-lg">
+                            <div class="grid lg:grid-cols-2 gap-8 items-center">
+                                <div class="text-center lg:text-left">
+                                    <h3 class="text-xl font-bold text-gray-800 mb-4" data-translate="download-app-title">বিকাশ অ্যাপ ডাউনলোড করুন</h3>
+                                    <p class="text-gray-600 text-sm mb-6" data-translate="download-app-description">
+                                        আমাদের আর্থিক সেবার সর্বোচ্চ সুবিধা নিন। আমাদের বিকাশ অ্যাপ ডাউনলোড করুন এবং সহজ ও নিরাপদ উপায়ে আপনার অর্থ পরিচালনা করুন।
+                                    </p>
+                                    <div class="flex flex-row gap-4 justify-center lg:justify-start">
+                                        <a href="https://play.google.com/store/apps/details?id=com.bKash.customerapp&pcampaignid=web_share" class="inline-block hover:opacity-80 transition-opacity">
+                                            <img src="img/gt.png" alt="Google Play" class="h-14 w-auto">
+                                        </a>
+                                        <a href="#app-store" class="inline-block hover:opacity-80 transition-opacity">
+                                            <img src="img/gt3.png" alt="App Store" class="h-14 w-auto">
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="text-center">
+                                    <img src="img/Available-on-Multiple-Platforms_App.webp" alt="bKash App" class="w-80 h-auto mx-auto">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- USSD Tab -->
+                    <div id="ussd-tab" class="tab-pane hidden">
+                        <div class="bg-white rounded-2xl p-8 shadow-lg">
+                            <div class="text-center">
+                                <h3 class="text-xl font-bold text-gray-800 mb-4" data-translate="ussd-title">ইউএসএসডি সেবা</h3>
+                                <p class="text-gray-600 text-sm mb-6" data-translate="ussd-description">
+                                    ইন্টারনেট সংযোগ ছাড়াই বিকাশ সেবা ব্যবহার করতে আপনার মোবাইল ফোন থেকে *247# ডায়াল করুন।
+                                </p>
+                                <div class="bg-bkash-light-gray rounded-lg p-6 inline-block">
+                                    <span class="text-3xl font-bold text-bkash-pink">*247#</span>
+                                </div>
+                                <div class="mt-6">
+                                    <p class="text-sm text-gray-500">সকল মোবাইল নেটওয়ার্কে ২৪/৭ উপলব্ধ</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Web Tab -->
+                    <div id="web-tab" class="tab-pane hidden">
+                        <div class="bg-white rounded-2xl p-8 shadow-lg">
+                            <div class="text-center">
+                                <h3 class="text-xl font-bold text-gray-800 mb-4" data-translate="web-portal-title">ওয়েব পোর্টাল</h3>
+                                <p class="text-gray-600 text-sm mb-6" data-translate="web-portal-description">
+                                    ইন্টারনেট সংযোগ সহ যেকোনো ডিভাইস থেকে আমাদের নিরাপদ ওয়েব পোর্টালের মাধ্যমে বিকাশ সেবা ব্যবহার করুন।
+                                </p>
+                                <a href="#web-portal" class="bg-bkash-pink text-white px-8 py-3 rounded-full font-medium hover:bg-bkash-dark-pink transition-colors inline-block" data-translate="visit-web-portal">
+                                    ওয়েব পোর্টাল ভিজিট করুন
+                                </a>
+                                <div class="mt-6">
+                                    <p class="text-sm text-gray-500">যেকোনো ব্রাউজার থেকে নিরাপদ এবং সহজ ব্যবহার</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="bg-bkash-light-pink py-16">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-2xl lg:text-3xl font-bold text-gray-800 mb-4" data-translate="faq-title">প্রায়শই জিজ্ঞাসিত প্রশ্ন</h2>
+            </div>
+
+            <div class="max-w-4xl mx-auto">
+                <div class="space-y-4">
+                    <div class="bg-white rounded-lg shadow-sm">
+                        <button class="w-full text-left p-6 flex justify-between items-center hover:bg-gray-50 transition-colors faq-toggle">
+                            <span class="font-medium text-gray-800 text-sm">আমার ফোনে "Singapore/Malaysia/South Korea prefix for mobile number" অথবা "Update bKash app to use bKash services. If VPN is enabled on your device, please turn it off" দেখাচ্ছে যদিও আমি বাংলাদেশে আছি। আমার কী করা উচিত?</span>
+                            <i class="fas fa-chevron-down text-bkash-pink transform transition-transform"></i>
+                        </button>
+                        <div class="px-6 pb-6 text-gray-600 text-sm faq-content hidden">
+                            অনুগ্রহ করে আপনার ডিভাইসের লোকেশন সেটিংস চেক করুন এবং VPN বন্ধ আছে কিনা নিশ্চিত করুন। সমস্যা অব্যাহত থাকলে বিকাশ কাস্টমার সার্ভিসে যোগাযোগ করুন।
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-sm">
+                        <button class="w-full text-left p-6 flex justify-between items-center hover:bg-gray-50 transition-colors faq-toggle">
+                            <span class="font-medium text-gray-800 text-sm">সংজ্ঞা</span>
+                            <i class="fas fa-chevron-down text-bkash-pink transform transition-transform"></i>
+                        </button>
+                        <div class="px-6 pb-6 text-gray-600 text-sm faq-content hidden">
+                            বিকাশ একটি মোবাইল আর্থিক সেবা যা আপনাকে টাকা পাঠানো, পেমেন্ট করা এবং বিভিন্ন আর্থিক লেনদেন করতে সাহায্য করে।
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-sm">
+                        <button class="w-full text-left p-6 flex justify-between items-center hover:bg-gray-50 transition-colors faq-toggle">
+                            <span class="font-medium text-gray-800 text-sm">আমি কি বিকাশ ব্যবহার করে ২৪/৭ লেনদেন করতে পারি?</span>
+                            <i class="fas fa-chevron-down text-bkash-pink transform transition-transform"></i>
+                        </button>
+                        <div class="px-6 pb-6 text-gray-600 text-sm faq-content hidden">
+                            হ্যাঁ, বিকাশ সেবা ২৪/৭ উপলব্ধ, যা আপনাকে যেকোনো সময় লেনদেন করতে সাহায্য করে।
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-sm">
+                        <button class="w-full text-left p-6 flex justify-between items-center hover:bg-gray-50 transition-colors faq-toggle">
+                            <span class="font-medium text-gray-800 text-sm">বিকাশ সেবা ব্যবহার করতে কি আমার অ্যাকাউন্ট খোলা প্রয়োজন?</span>
+                            <i class="fas fa-chevron-down text-bkash-pink transform transition-transform"></i>
+                        </button>
+                        <div class="px-6 pb-6 text-gray-600 text-sm faq-content hidden">
+                            হ্যাঁ, আমাদের সেবা ব্যবহার করতে আপনার একটি বিকাশ অ্যাকাউন্টের জন্য নিবন্ধন করতে হবে। নিবন্ধন বিনামূল্যে এবং সহজ।
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-sm">
+                        <button class="w-full text-left p-6 flex justify-between items-center hover:bg-gray-50 transition-colors faq-toggle">
+                            <span class="font-medium text-gray-800 text-sm">কে বিকাশ অ্যাকাউন্ট খুলতে পারেন?</span>
+                            <i class="fas fa-chevron-down text-bkash-pink transform transition-transform"></i>
+                        </button>
+                        <div class="px-6 pb-6 text-gray-600 text-sm faq-content hidden">
+                            বৈধ মোবাইল নম্বর এবং জাতীয় পরিচয়পত্র সহ যেকোনো বাংলাদেশী নাগরিক বিকাশ অ্যাকাউন্ট খুলতে পারেন।
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-sm">
+                        <button class="w-full text-left p-6 flex justify-between items-center hover:bg-gray-50 transition-colors faq-toggle">
+                            <span class="font-medium text-gray-800 text-sm">অ্যাকাউন্ট খোলার জন্য কোনো চার্জ আছে কি?</span>
+                            <i class="fas fa-chevron-down text-bkash-pink transform transition-transform"></i>
+                        </button>
+                        <div class="px-6 pb-6 text-gray-600 text-sm faq-content hidden">
+                            না, বিকাশ অ্যাকাউন্ট খোলা সম্পূর্ণ বিনামূল্যে।
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center mt-8">
+                    <a href="https://www.bkash.com/help/faq" class="bg-white text-bkash-pink border-2 border-bkash-pink px-8 py-3 rounded-full font-medium hover:bg-bkash-pink hover:text-white transition-all duration-300 inline-block" data-translate="view-details">
+                        বিস্তারিত দেখুন
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Icons Section -->
+    <section class="bg-white py-16">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-xl lg:text-2xl font-bold text-gray-800 mb-4" data-translate="services-title">বিকাশ সেবা সম্পর্কে আরও জানুন</h2>
+            </div>
+
+            <div class="relative max-w-4xl mx-auto">
+                <!-- Navigation Arrows -->
+                <button class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white shadow-lg rounded-full w-10 h-10 flex items-center justify-center text-gray-600 hover:text-bkash-pink transition-colors z-10" id="prevBtn">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white shadow-lg rounded-full w-10 h-10 flex items-center justify-center text-gray-600 hover:text-bkash-pink transition-colors z-10" id="nextBtn">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+
+                <!-- Services Container -->
+                <div class="overflow-hidden mx-12">
+                    <div class="flex transition-transform duration-300 ease-in-out" id="servicesContainer">
+                        <div class="flex-shrink-0 w-1/6 text-center px-2">
+                            <a href="#send-money" class="block">
+                                <div class="w-16 h-16 flex items-center justify-center mx-auto mb-3">
+                                    <img src="img/01-send-money_1666154832042.webp" alt="Send Money" class="w-12 h-12">
+                                </div>
+                                <p class="text-xs font-medium text-gray-700" data-translate="send-money">টাকা পাঠান</p>
+                            </a>
+                        </div>
+
+                        <div class="flex-shrink-0 w-1/6 text-center px-2">
+                            <a href="#mobile-recharge" class="block">
+                                <div class="w-16 h-16 flex items-center justify-center mx-auto mb-3">
+                                    <img src="img/02-mobile-recharge_1666155167971.webp" alt="Mobile Recharge" class="w-12 h-12">
+                                </div>
+                                <p class="text-xs font-medium text-gray-700" data-translate="mobile-recharge">মোবাইল রিচার্জ</p>
+                            </a>
+                        </div>
+
+                        <div class="flex-shrink-0 w-1/6 text-center px-2">
+                            <a href="#payment" class="block">
+                                <div class="w-16 h-16 flex items-center justify-center mx-auto mb-3">
+                                    <img src="img/04-payment_1666159400113.webp" alt="Payment" class="w-12 h-12">
+                                </div>
+                                <p class="text-xs font-medium text-gray-700" data-translate="payment">পেমেন্ট</p>
+                            </a>
+                        </div>
+
+                        <div class="flex-shrink-0 w-1/6 text-center px-2">
+                            <a href="#cash-out" class="block">
+                                <div class="w-16 h-16 flex items-center justify-center mx-auto mb-3">
+                                    <img src="img/03-cash-out_1666158620022.webp" alt="Cash Out" class="w-12 h-12">
+                                </div>
+                                <p class="text-xs font-medium text-gray-700" data-translate="cash-out">ক্যাশ আউট</p>
+                            </a>
+                        </div>
+
+                        <div class="flex-shrink-0 w-1/6 text-center px-2">
+                            <a href="#bkash-bundle" class="block">
+                                <div class="w-16 h-16 flex items-center justify-center mx-auto mb-3">
+                                    <img src="img/bkash-bundle-icon-120-x-120_1742458535171.webp" alt="bKash Bundle" class="w-12 h-12">
+                                </div>
+                                <p class="text-xs font-medium text-gray-700" data-translate="bkash-bundle">বিকাশ বান্ডেল</p>
+                            </a>
+                        </div>
+
+                        <div class="flex-shrink-0 w-1/6 text-center px-2">
+                            <a href="#add-money" class="block">
+                                <div class="w-16 h-16 flex items-center justify-center mx-auto mb-3">
+                                    <img src="img/05-add-money_1666160847291.webp" alt="Add Money" class="w-12 h-12">
+                                </div>
+                                <p class="text-xs font-medium text-gray-700" data-translate="add-money">টাকা যোগ করুন</p>
+                            </a>
+                        </div>
+
+                        <div class="flex-shrink-0 w-1/6 text-center px-2">
+                            <a href="#pay-bill" class="block">
+                                <div class="w-16 h-16 flex items-center justify-center mx-auto mb-3">
+                                    <img src="img/06-pay-bill_1703790805248.webp" alt="Pay Bill" class="w-12 h-12">
+                                </div>
+                                <p class="text-xs font-medium text-gray-700" data-translate="pay-bill">বিল পরিশোধ</p>
+                            </a>
+                        </div>
+
+                        <div class="flex-shrink-0 w-1/6 text-center px-2">
+                            <a href="#savings" class="block">
+                                <div class="w-16 h-16 flex items-center justify-center mx-auto mb-3">
+                                    <img src="img/savings-icon-web_1727696283394.webp" alt="Savings" class="w-12 h-12">
+                                </div>
+                                <p class="text-xs font-medium text-gray-700" data-translate="savings">সঞ্চয়</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- Language Translator -->
+    <div class="fixed top-4 right-4 z-40">
+        <div class="bg-white rounded-lg shadow-lg p-2">
+            <select id="languageSelector" class="bg-transparent border-none text-sm font-medium text-gray-700 focus:outline-none cursor-pointer">
+                <option value="en">English</option>
+                <option value="bn">বাংলা</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Live Chat Button -->
+    <div class="fixed bottom-6 right-6 z-50" id="liveChatContainer">
+        <button id="liveChatBtn" class="p-0 m-0 border-none bg-transparent">
+    <img src="img/live.png" alt="Chat Icon" class="h-100 w-100 block">
+  </button>
+    </div>
+
+
+
+
+
+
+    <!-- Custom CSS for mobile menu interactions -->
+    <style>
+        /* Hide live chat when mobile menu is open */
+
+        .mobile-menu-open #liveChatContainer {
+            display: none;
+        }
+
+        /* Mobile menu slide animation */
+
+        #mobile-menu {
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+            visibility: visible;
+        }
+
+        #mobile-menu.show {
+            transform: translateX(0) !important;
+        }
+
+        #mobile-menu-overlay {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        #mobile-menu-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Ensure mobile menu is properly positioned */
+
+        @media (max-width: 1023px) {
+            #mobile-menu {
+                position: fixed;
+                top: 0;
+                right: 0;
+                width: 320px;
+                height: 100vh;
+                background: white;
+                z-index: 50;
+                box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+                transform: translateX(100%);
+            }
+        }
+    </style>
+
+    <!-- Footer -->
+    <footer class="text-white py-16" style="background-color: #1e1e1e;">
+        <div class="container mx-auto px-4">
+            <!-- Mobile Layout: Two Columns -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+                <!-- Logo and Description -->
+                <div class="lg:col-span-1 md:col-span-2">
+                    <img src="img/mzt.png" alt="bKash" class="h-10 mb-6 filter brightness-0 invert">
+                    <p class="text-gray-300 text-xs leading-relaxed mb-6">
+                        বিকাশ অ্যাপ ডাউনলোড করুন
+                    </p>
+                    <div class="flex flex-row gap-3">
+                        <a href="img/google.png" class="inline-block">
+                            <img src="img/gt.png" alt="Google Play" class="h-12 w-auto hover:opacity-80 transition-opacity">
+                        </a>
+                        <a href="img/gt3.png" class="inline-block">
+                            <img src="img/gt3.png" alt="App Store" class="h-12 w-auto hover:opacity-80 transition-opacity">
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Services & Company Section for Mobile -->
+                <div class="md:hidden col-span-1">
+                    <div class="grid grid-cols-2 gap-8">
+                        <!-- Services -->
+                        <div>
+                            <h4 class="font-medium mb-4 text-white text-sm">সেবাসমূহ</h4>
+                            <ul class="space-y-2 text-xs text-gray-300">
+                                <li><a href="#send-money" class="hover:text-bkash-pink transition-colors">টাকা পাঠান</a></li>
+                                <li><a href="#mobile-recharge" class="hover:text-bkash-pink transition-colors">মোবাইল রিচার্জ</a></li>
+                                <li><a href="#payment" class="hover:text-bkash-pink transition-colors">পেমেন্ট</a></li>
+                                <li><a href="#cash-out" class="hover:text-bkash-pink transition-colors">ক্যাশ আউট</a></li>
+                                <li><a href="#add-money" class="hover:text-bkash-pink transition-colors">টাকা যোগ করুন</a></li>
+                                <li><a href="#pay-bill" class="hover:text-bkash-pink transition-colors">বিল পরিশোধ</a></li>
+                            </ul>
+                        </div>
+
+                        <!-- Company -->
+                        <div>
+                            <h4 class="font-medium mb-4 text-white text-sm">কোম্পানি</h4>
+                            <ul class="space-y-2 text-xs text-gray-300">
+                                <li><a href="#about-us" class="hover:text-bkash-pink transition-colors">আমাদের সম্পর্কে</a></li>
+                                <li><a href="#career" class="hover:text-bkash-pink transition-colors">ক্যারিয়ার</a></li>
+                                <li><a href="#news" class="hover:text-bkash-pink transition-colors">সংবাদ</a></li>
+                                <li><a href="#contact" class="hover:text-bkash-pink transition-colors">যোগাযোগ</a></li>
+                                <li><a href="#investor-relations" class="hover:text-bkash-pink transition-colors">বিনিয়োগকারী সম্পর্ক</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Desktop Layout: Individual Columns -->
+                <!-- Services -->
+                <div class="hidden md:block">
+                    <h4 class="font-medium mb-4 text-white text-sm">সেবাসমূহ</h4>
+                    <ul class="space-y-2 text-xs text-gray-300">
+                        <li><a href="#" class="hover:text-bkash-pink transition-colors">টাকা পাঠান</a></li>
+                        <li><a href="#" class="hover:text-bkash-pink transition-colors">মোবাইল রিচার্জ</a></li>
+                        <li><a href="#" class="hover:text-bkash-pink transition-colors">পেমেন্ট</a></li>
+                        <li><a href="#" class="hover:text-bkash-pink transition-colors">ক্যাশ আউট</a></li>
+                        <li><a href="#" class="hover:text-bkash-pink transition-colors">টাকা যোগ করুন</a></li>
+                        <li><a href="#" class="hover:text-bkash-pink transition-colors">বিল পরিশোধ</a></li>
+                    </ul>
+                </div>
+
+                <!-- Company -->
+                <div class="hidden md:block">
+                    <h4 class="font-medium mb-4 text-white text-sm">কোম্পানি</h4>
+                    <ul class="space-y-2 text-xs text-gray-300">
+                        <li><a href="#" class="hover:text-bkash-pink transition-colors">আমাদের সম্পর্কে</a></li>
+                        <li><a href="#" class="hover:text-bkash-pink transition-colors">ক্যারিয়ার</a></li>
+                        <li><a href="#" class="hover:text-bkash-pink transition-colors">সংবাদ</a></li>
+                        <li><a href="#" class="hover:text-bkash-pink transition-colors">যোগাযোগ</a></li>
+                        <li><a href="#" class="hover:text-bkash-pink transition-colors">বিনিয়োগকারী সম্পর্ক</a></li>
+                    </ul>
+                </div>
+
+                <!-- Business -->
+                <div class="hidden lg:block">
+                    <h4 class="font-medium mb-4 text-white text-sm">ব্যবসা</h4>
+                    <ul class="space-y-2 text-xs text-gray-300">
+                        <li><a href="#merchant" class="hover:text-bkash-pink transition-colors">মার্চেন্ট</a></li>
+                        <li><a href="#agent" class="hover:text-bkash-pink transition-colors">এজেন্ট</a></li>
+                        <li><a href="#developer" class="hover:text-bkash-pink transition-colors">ডেভেলপার</a></li>
+                        <li><a href="#distributor" class="hover:text-bkash-pink transition-colors">ডিস্ট্রিবিউটর</a></li>
+                        <li><a href="#corporate" class="hover:text-bkash-pink transition-colors">কর্পোরেট</a></li>
+                    </ul>
+                </div>
+
+                <!-- Others -->
+                <div class="hidden lg:block">
+                    <h4 class="font-medium mb-4 text-white text-sm">অন্যান্য</h4>
+                    <ul class="space-y-2 text-xs text-gray-300">
+                        <li><a href="#help" class="hover:text-bkash-pink transition-colors">সাহায্য</a></li>
+                        <li><a href="#terms-conditions" class="hover:text-bkash-pink transition-colors">শর্তাবলী</a></li>
+                        <li><a href="#privacy-policy" class="hover:text-bkash-pink transition-colors">গোপনীয়তা নীতি</a></li>
+                        <li><a href="#tariff" class="hover:text-bkash-pink transition-colors">ট্যারিফ</a></li>
+                    </ul>
+
+                    <!-- Certificate of Ownership -->
+                    <div class="mt-8">
+                        <h5 class="font-medium mb-3 text-white text-xs">মালিকানার সার্টিফিকেট ও</h5>
+                        <h5 class="font-medium mb-3 text-white text-xs">নিয়ন্ত্রক সম্মতি</h5>
+                        <div class="flex space-x-4">
+                            <div class="bg-white p-2 rounded">
+                                <img src="img/rq-140px-x-140px_1701968485695.webp" alt="Certificate" class="w-12 h-12">
+                            </div>
+                            <div class="bg-white p-2 rounded">
+                                <img src="img/rq-140px-x-140px_1701968485695.webp" alt="Certificate" class="w-12 h-12">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Section -->
+            <div class="border-t border-gray-700 mt-12 pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <div class="text-xs text-gray-400 mb-4 md:mb-0">
+                        <p>© ২০২৫ বিকাশ, সকল অধিকার সংরক্ষিত</p>
+                    </div>
+                    <div class="flex space-x-6">
+                        <a href="#" class="text-gray-400 hover:text-bkash-pink transition-colors">
+                            <i class="fab fa-facebook-f text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-bkash-pink transition-colors">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-bkash-pink transition-colors">
+                            <i class="fab fa-youtube text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-bkash-pink transition-colors">
+                            <i class="fab fa-linkedin-in text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-bkash-pink transition-colors">
+                            <i class="fab fa-instagram text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+
+    <!-- Mobile Menu Script -->
+    <script>
+        // Mobile Menu Functionality
+        const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
+        const mobileMenuClose = document.getElementById('mobile-menu-close');
+        const hamburgerIcon = mobileMenuToggle ? .querySelector('i');
+
+        // Toggle mobile menu
+        if (mobileMenuToggle && mobileMenu) {
+            mobileMenuToggle.addEventListener('click', (e) => {
+                e.preventDefault();
+
+                const isMenuOpen = mobileMenu.classList.contains('show');
+
+                if (isMenuOpen) {
+                    closeMobileMenu();
+                } else {
+                    openMobileMenu();
+                }
+            });
+        }
+
+        // Open mobile menu
+        function openMobileMenu() {
+            if (mobileMenu && mobileMenuOverlay && hamburgerIcon) {
+                mobileMenu.classList.add('show');
+                mobileMenuOverlay.classList.remove('hidden');
+                mobileMenuOverlay.classList.add('show');
+                hamburgerIcon.className = 'fas fa-times';
+                document.body.style.overflow = 'hidden';
+                document.body.classList.add('mobile-menu-open');
+            }
+        }
+
+        // Close mobile menu
+        function closeMobileMenu() {
+            if (mobileMenu && mobileMenuOverlay && hamburgerIcon) {
+                mobileMenu.classList.remove('show');
+                mobileMenuOverlay.classList.remove('show');
+                setTimeout(() => {
+                    mobileMenuOverlay.classList.add('hidden');
+                }, 300);
+                hamburgerIcon.className = 'fas fa-bars';
+                document.body.style.overflow = 'auto';
+                document.body.classList.remove('mobile-menu-open');
+            }
+        }
+
+        // Close mobile menu when clicking close button
+        if (mobileMenuClose) {
+            mobileMenuClose.addEventListener('click', closeMobileMenu);
+        }
+
+        // Close mobile menu when clicking overlay
+        if (mobileMenuOverlay) {
+            mobileMenuOverlay.addEventListener('click', closeMobileMenu);
+        }
+
+        // Close menu when clicking outside (for safety)
+        document.addEventListener('click', (e) => {
+            if (mobileMenu && mobileMenuToggle && !mobileMenu.contains(e.target) && !mobileMenuToggle.contains(e.target) && mobileMenu.classList.contains('show')) {
+                closeMobileMenu();
+            }
+        });
+    </script>
+</body>
+
+</html>
